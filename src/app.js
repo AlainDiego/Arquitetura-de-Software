@@ -1,4 +1,15 @@
 import express from "express";
+import connectToDatabase from "./config/dbConnect.js";
+
+const connection = await connectToDatabase();
+
+connection.on("error", (error) => {
+    console.error("erro de conexão", error);
+});
+
+connection.once("open", () => {
+    console.log("🔥 Conectado ao MongoDB com sucesso!");
+});
 
 const app = express();
 app.use(express.json());
@@ -61,3 +72,5 @@ app.delete("/posts/:id", (req, res) => {
 });
 
 export default app;
+
+//mongodb+srv://coultalain:5jC5PQattnUZ6uLY@cluster0.ifx2y.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
