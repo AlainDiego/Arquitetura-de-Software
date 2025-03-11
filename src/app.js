@@ -1,5 +1,6 @@
 import express from "express";
 import connectToDatabase from "./config/dbConnect.js";
+import post from "./models.Post.js"
 
 const connection = await connectToDatabase();
 
@@ -43,7 +44,8 @@ app.get("/", (req, res) => {
     res.status(200).send("API com Node e Express.js");
 });
 
-app.get("/posts", (req, res) => {
+app.get("/posts", async (req, res) => {
+    const listPosts = await post.find({});
     res.status(200).json(posts);
 });
 
