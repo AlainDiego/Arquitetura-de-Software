@@ -1,12 +1,11 @@
 import mongoose from "mongoose";
 
 const postSchema = new mongoose.Schema({
-    id: {type: mongoose.Schema.Types.ObjectId },
-    title: {type: String, require: true },
-    description: {type: String, required: true},
-    author: {type: String, require: true},
-}, {versionKey: false});
+    title: { type: String, required: true }, 
+    description: { type: String, required: true },
+    author: { type: String, required: true }
+}, { versionKey: false });
 
-const post = mongoose.model("posts", postSchema);
+const Post = mongoose.model("posts", postSchema);
 
-export default post;
+export default Post;
