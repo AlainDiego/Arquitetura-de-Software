@@ -15,24 +15,24 @@ connection.once("open", () => {
 const app = express();
 app.use(express.json());
 
-const posts = [
-    {
-        id: 1,
-        title: "Aula 1",
-        description: "Descrição aula 1",
-        author: "Faluno"
-    }, {
-        id: 2,
-        title: "Aula 2",
-        description: "Descrição aula 2",
-        author: "Beltrano"
-    }, {
-        id: 3,
-        title: "Aula 3",
-        description: "Descrição aula 3",
-        author: "Siclano"
-    }
-]
+//const posts = [
+//  {
+//      id: 1,
+//       title: "Aula 1",
+//       description: "Descrição aula 1",
+//       author: "Faluno"
+//   }, {
+//        id: 2,
+//        title: "Aula 2",
+//        description: "Descrição aula 2",
+//        author: "Beltrano"
+//    }, {
+//       id: 3,
+//        title: "Aula 3",
+//        description: "Descrição aula 3",
+//        author: "Siclano"
+//    }
+//]
 
 function searchPost(id) {
     return posts.findIndex(posts => {
@@ -49,10 +49,10 @@ app.get("/posts", async (req, res) => {
     res.status(200).json(posts);
 });
 
-app.get("/posts/:id", (req, res) => {
-    const index = searchPost(req.params.id);
-    res.status(200).json(posts[index]);
-});
+//app.get("/posts/:id", (req, res) => {
+//    const index = searchPost(req.params.id);
+//    res.status(200).json(posts[index]);
+//});
 
 app.post("/posts", (req, res) => {
     posts.push(req.body);
