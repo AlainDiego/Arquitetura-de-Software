@@ -1,5 +1,4 @@
-import "dotenv/config"
-// import http from "http";
+import "dotenv/config";
 import app from "./src/app.js";
 
 const PORT = 3000;
@@ -9,10 +8,6 @@ const rotas = {
     "/posts": "Rota de postagem",
     "/autores": "Rota de autores",
 }
-
-//const server = http.createServer((req, res) => {
-//    res.writeHead(200, {"Content-Type": "text/plain" });
-//});
 
 app.listen(PORT, () => {
     console.log("Servidor na escuta!");

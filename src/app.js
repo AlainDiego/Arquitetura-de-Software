@@ -1,78 +1,82 @@
 import express from "express";
 import connectToDatabase from "./config/dbConnect.js";
-import post from "./models/Post.js"
+import post from "./models/Post.js";
+import routes from "./routes/index.js";
 
 const connection = await connectToDatabase();
 
 connection.on("error", (error) => {
-    console.error("erro de conexão", error);
+    console.error("Erro de conexão", error);
 });
 
 connection.once("open", () => {
-    console.log("🔥 Conectado ao MongoDB com sucesso!");
+    console.log("Conexão com o banco realizada com sucesso!");
 });
 
 const app = express();
-app.use(express.json());
+routes(app);
 
-//const posts = [
-//  {
-//      id: 1,
-//       title: "Aula 1",
-//       description: "Descrição aula 1",
-//       author: "Faluno"
-//   }, {
-//        id: 2,
-//        title: "Aula 2",
-//        description: "Descrição aula 2",
-//        author: "Beltrano"
-//    }, {
-//       id: 3,
-//        title: "Aula 3",
-//        description: "Descrição aula 3",
-//        author: "Siclano"
-//    }
-//]
+// Get all posts
+// app.get("/posts", async (req, res) => {
+//     try {
+//         const listPosts = await post.find({});
+//         res.status(200).json(posts);
+//     } catch(error) {
+//         res.status(500).send();
+//     }
+// });
 
-function searchPost(id) {
-    return posts.findIndex(posts => {
-        return posts.id === Number(id);
-    });
-}
-
-app.get("/", (req, res) => {
-    res.status(200).send("API com Node e Express.js");
+// Create new post
+app.post("/posts", async (req, res) => {
+    try {
+        const newPost = post(req.body);
+        await newPost.save();
+        res.status(200).json({
+            message: "Post criado com sucesso!",
+            post: newPost,
+        });
+    } catch(error) {
+        res.status(500).send(error.message);
+    }
 });
 
-app.get("/posts", async (req, res) => {
-    const listPosts = await post.find({});
-    res.status(200).json(posts);
-});
+// Get post by ID
+// app.get("/posts/:id", async (req, res) => {
+//     try {
+//         const postId = await post.findById(req.params.id);
+//         if(!postId) {
+//             return res.status(404).send("Post não encotrando!");
+//         }
+//         res.status(200).json(postId);
+//     } catch (error) {
+//         res.status(500).send(error.message);
+//     }
+// });
 
-//app.get("/posts/:id", (req, res) => {
-//    const index = searchPost(req.params.id);
-//    res.status(200).json(posts[index]);
-//});
+// app.post("/posts", (req, res) => {
+//     posts.push(req.body);
+//     res.status(201).send("Post criado com sucesso!");
+// });
 
-app.post("/posts", (req, res) => {
-    posts.push(req.body);
-    res.status(201).send("Post criado com sucesso!");
-});
+// app.put("/posts/:id", (req, res) => {
+//     const index = searchPost(req.params.id);
+//     posts[index].title = req.body.title;
+//     posts[index].description = req.body.description;
+//     posts[index].author = req.body.author;
+//     res.status(200).json(posts[index]);
+// });
 
-app.put("/posts/:id", (req, res) => {
-    const index = searchPost(req.params.id);
-    posts[index].title = req.body.title;
-    posts[index].description = req.body.description;
-    posts[index].author = req.body.author;
-    res.status(200).json(posts[index]);
-});
-
-app.delete("/posts/:id", (req, res) => {
-    const index = searchPost(req.params.id);
-    posts.splice(index, 1);
-    res.status(200).send("Post removido com sucesso!");
+// Delete post
+app.delete("/posts/:id", async (req, res) => {
+    try {
+        const deletePost = await post.findById(req.params.id);
+        res.status(200).send("Post removido com sucesso!");
+        if(!deletePost) {
+            return res.status(404).send("Post não encotrando!");
+        }        
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
 });
 
 export default app;
-
-//mongodb+srv://coultalain:5jC5PQattnUZ6uLY@cluster0.ifx2y.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0

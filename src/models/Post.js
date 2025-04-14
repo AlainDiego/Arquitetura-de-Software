@@ -1,11 +1,14 @@
 import mongoose from "mongoose";
+import { authorSchema } from "./Author.js";
 
 const postSchema = new mongoose.Schema({
-    title: { type: String, required: true }, 
-    description: { type: String, required: true },
-    author: { type: String, required: true }
-}, { versionKey: false });
+    id: { type: mongoose.Schema.Types.ObjectId },
+    title: {type: String, require: true},
+    description: { type: String, require: true},
+    // author: { type: String, require: true },
+    author: authorSchema
+}, {versionKey: false});
 
-const Post = mongoose.model("posts", postSchema);
+const post = mongoose.model("posts", postSchema);
 
-export default Post;
+export default post;
