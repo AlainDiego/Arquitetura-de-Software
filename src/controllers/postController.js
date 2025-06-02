@@ -1,15 +1,17 @@
 import post from "../models/Post.js";
 
 class PostController {
+    //Get all posts
     static async getAllPosts(req, res) {
         try {
             const listPosts = await post.find({});
             res.status(200).json(listPosts);
-        } catch(error) {
+        } catch (error) {
             res.status(500).send(error.message);
         }
-    };
+    }
 
+    //Create new post
     static async createPost(req, res) {
         try {
             const newPost = new post(req.body);
@@ -17,37 +19,53 @@ class PostController {
             res.status(201).json({
                 message: "Post criado com sucesso!",
                 post: newPost,
-            });
-        } catch(error) {
+            })
+        } catch (error) {
             res.status(500).send(error.message);
         }
-    };
+    }
 
+    //Get post by ID
     static async getPostById(req, res) {
         try {
-            const id = req.params.id;
-            const foundPost = await post.findById(id);
-            if(!foundPost) {
-                return res.status(404).send("Post não encotrando!");
+            const postById = await post.findById(req.params.id);
+            if (!postById) {
+                return res.status(404).send("Post não encontrado!");
             }
-            res.status(200).json(foundPost);
+            res.status(200).json(postById);
         } catch (error) {
             res.status(500).send(error.message);
         }
-    };
+    }
 
-    static async deletePostById(req, res) {
+    //Delete post by ID
+    static async deletePost(req, res) {
         try {
-            const id = req.params.id;
-            const deletePost = await post.findById(id);
+            const deletedPost = await post.findByIdAndDelete(req.params.id);
+            if (!deletedPost) {
+                return res.status(404).send("Post não encontrado!");
+            }
             res.status(200).send("Post removido com sucesso!");
-            if(!deletePost) {
-                return res.status(404).send("Post não encotrando!");
-            }        
         } catch (error) {
             res.status(500).send(error.message);
         }
-    };
+    }
+
+    //Update post by ID
+    static async updatePost(req, res) {
+        try {
+            const updatePost = await post.findByIdAndUpdate(req.params.id, req.body);
+            if (!updatePost) {
+                return res.status(404).send("Post não encontrado!");
+            }
+            res.status(201).json({
+                message: "Post atualizado com sucesso!",
+                post: updatePost,
+            });
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    }
 }
 
 export default PostController;
